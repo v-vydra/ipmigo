@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/k-sone/ipmigo"
+	"github.com/v-vydra/ipmigo"
 )
 
 // Print system event logs.

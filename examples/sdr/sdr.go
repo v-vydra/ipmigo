@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/k-sone/ipmigo"
+	"github.com/v-vydra/ipmigo"
 )
 
 // | Name | Type | Reading | Units | Status(for threshold-base) |
-var format string = "| %-16s | %-30s | %-10s | %-20s | %-3s |\n"
+var format = "| %-16s | %-30s | %-10s | %-20s | %-3s |\n"
 
 // Print sensor data repository entries and readings.
 func main() {

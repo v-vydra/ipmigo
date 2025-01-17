@@ -3,6 +3,11 @@ ipmigo
 
 **Work In Progress**
 
+About
+-----------------
+
+__Forked from [github.com/k-sone/ipmigo](github.com/k-sone/ipmigo)__
+
 ipmigo is a golang implementation for IPMI client.
 
 Supported Version
@@ -19,7 +24,7 @@ package main
 import (
     "fmt"
 
-    "github.com/k-sone/ipmigo"
+    "github.com/v-vydra/ipmigo"
 )
 
 func main() {
