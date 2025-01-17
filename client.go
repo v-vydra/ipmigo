@@ -7,12 +7,13 @@ import (
 
 type Version int
 
+//goland:noinspection GoSnakeCaseUsage
 const (
 	V1_5 Version = iota + 1
 	V2_0
 )
 
-// Channel Privilege Levels. (Section 6.8)
+// PrivilegeLevel Channel Privilege Levels. (Section 6.8)
 type PrivilegeLevel uint8
 
 const (
@@ -37,7 +38,7 @@ func (p PrivilegeLevel) String() string {
 	}
 }
 
-// An argument for creating an IPMI Client
+// Arguments An argument for creating an IPMI Client
 type Arguments struct {
 	Version        Version        // IPMI version to use
 	Network        string         // See net.Dial parameter (The default is `udp`)
@@ -119,7 +120,7 @@ func (a *Arguments) validate() error {
 	return nil
 }
 
-// IPMI Client
+// Client IPMI Client
 type Client struct {
 	session session
 	args    *Arguments
@@ -132,7 +133,7 @@ func (c *Client) Open() error               { return c.session.Open() }
 func (c *Client) Close() error              { return c.session.Close() }
 func (c *Client) Execute(cmd Command) error { return c.session.Execute(cmd) }
 
-// Create an IPMI Client
+// NewClient Create an IPMI Client
 func NewClient(args Arguments) (*Client, error) {
 	if err := args.validate(); err != nil {
 		return nil, err

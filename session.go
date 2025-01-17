@@ -19,7 +19,7 @@ const (
 	payloadTypeRAKP4                   = 0x15
 )
 
-// Return a payloadType without encrypt/authenticate flags
+// Pure Return a payloadType without encrypt/authenticate flags
 func (p payloadType) Pure() payloadType {
 	return payloadType(byte(p) & 0x3f)
 }

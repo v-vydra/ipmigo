@@ -4,7 +4,7 @@ import (
 	"encoding/binary"
 )
 
-// Get SDR Repository Info Command (Section 33.9)
+// GetSDRRepositoryInfoCommand Get SDR Repository Info Command (Section 33.9)
 type GetSDRRepositoryInfoCommand struct {
 	// Response Data
 	SDRVersion  uint8 // (0x01: IPMIv1.0, 0x51: IPMIv1.5, 0x02: IPMIv2.0)
@@ -31,7 +31,7 @@ func (c *GetSDRRepositoryInfoCommand) Unmarshal(buf []byte) ([]byte, error) {
 	return buf[14:], nil
 }
 
-// Reserve SDR Repository Command (Section 33.11)
+// ReserveSDRRepositoryCommand Reserve SDR Repository Command (Section 33.11)
 type ReserveSDRRepositoryCommand struct {
 	// Response Data
 	ReservationID uint16
@@ -55,7 +55,7 @@ func (c *ReserveSDRRepositoryCommand) Unmarshal(buf []byte) ([]byte, error) {
 	return buf[2:], nil
 }
 
-// Get SDR Command (Section 33.12)
+// GetSDRCommand Get SDR Command (Section 33.12)
 type GetSDRCommand struct {
 	// Request Data
 	ReservationID uint16
@@ -75,7 +75,7 @@ func (c *GetSDRCommand) String() string         { return cmdToJSON(c) }
 
 func (c *GetSDRCommand) Marshal() ([]byte, error) {
 	return []byte{byte(c.ReservationID), byte(c.ReservationID >> 8), byte(c.RecordID), byte(c.RecordID >> 8),
-		byte(c.RecordOffset), byte(c.ReadBytes)}, nil
+		c.RecordOffset, c.ReadBytes}, nil
 }
 
 func (c *GetSDRCommand) Unmarshal(buf []byte) ([]byte, error) {

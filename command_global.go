@@ -1,6 +1,6 @@
 package ipmigo
 
-// Get Device ID Command (Section 20.1)
+// GetDeviceIDCommand Get Device ID Command (Section 20.1)
 type GetDeviceIDCommand struct {
 	// Response Data
 	DeviceID              uint8
@@ -46,5 +46,4 @@ func (c *GetDeviceIDCommand) Unmarshal(buf []byte) ([]byte, error) {
 	} else {
 		return buf[15:], nil
 	}
-	return nil, nil
 }

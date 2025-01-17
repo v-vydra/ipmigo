@@ -113,7 +113,7 @@ func newCloseSessionCommand(id uint32) *closeSessionCommand {
 	return &closeSessionCommand{SessionID: id}
 }
 
-// Get Session Info Command (Section 22.20)
+// GetSessionInfoCommand Get Session Info Command (Section 22.20)
 type GetSessionInfoCommand struct {
 	// Request Data
 	SessionIndex uint8  // Request Type (0x00: Current , 0xN: Nth active, 0xfe: By handle , 0xff: By ID)

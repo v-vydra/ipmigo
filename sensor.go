@@ -7,23 +7,23 @@ import (
 type ThresholdStatus string
 
 const (
-	// Normal operating ranges
+	// ThresholdStatusOK Normal operating ranges
 	ThresholdStatusOK ThresholdStatus = "ok"
-	// Lower Non-Recoverable
+	// ThresholdStatusLNR Lower Non-Recoverable
 	ThresholdStatusLNR ThresholdStatus = "lnr"
-	// Lower Critical
+	// ThresholdStatusLCR Lower Critical
 	ThresholdStatusLCR ThresholdStatus = "lcr"
-	// Lower Non-Critical
+	// ThresholdStatusLNC Lower Non-Critical
 	ThresholdStatusLNC ThresholdStatus = "lnc"
-	// Upper Non-Recoverable
+	// ThresholdStatusUNR Upper Non-Recoverable
 	ThresholdStatusUNR ThresholdStatus = "unr"
-	// Upper Critical
+	// ThresholdStatusUCR Upper Critical
 	ThresholdStatusUCR ThresholdStatus = "ucr"
-	// Upper Non-Critical
+	// ThresholdStatusUNC Upper Non-Critical
 	ThresholdStatusUNC ThresholdStatus = "unc"
 )
 
-// Returns threshold status of threshold-base sensor.
+// NewThresholdStatus Returns threshold status of threshold-base sensor.
 func NewThresholdStatus(status uint8) ThresholdStatus {
 	if status&0x04 != 0 {
 		return ThresholdStatusLNR
@@ -42,7 +42,7 @@ func NewThresholdStatus(status uint8) ThresholdStatus {
 	}
 }
 
-// Sensor Type (Table 42-3)
+// SensorType Sensor Type (Table 42-3)
 type SensorType uint8
 
 var sensorTypeDescriptions []string = []string{
@@ -103,7 +103,7 @@ func (t SensorType) String() string {
 	}
 }
 
-// Sensor Unit Type (Section 43.17)
+// UnitType Sensor Unit Type (Section 43.17)
 type UnitType uint8
 
 var unitDescriptions []string = []string{
@@ -204,5 +204,5 @@ func (u UnitType) String() string {
 	if i := int(u); i < len(unitDescriptions) {
 		return unitDescriptions[i]
 	}
-	return fmt.Sprint("unknown(%d)", u)
+	return fmt.Sprintf("unknown(%d)", uint8(u))
 }

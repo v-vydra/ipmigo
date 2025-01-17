@@ -13,23 +13,25 @@ const (
 	selRecordSize = 16
 )
 
-// Sensor Event Log Record Type
+// SELType Sensor Event Log Record Type
 type SELType uint8
 
-func (t SELType) IsTimestampedOEM() bool    { return t >= 0xc0 && t <= 0xdf }
-func (t SELType) IsNonTimestampedOEM() bool { return t >= 0xe0 && t <= 0xff }
+func (t SELType) IsTimestampedOEM() bool { return t >= 0xc0 && t <= 0xdf }
+func (t SELType) IsNonTimestampedOEM() bool { //goland:noinspection GoBoolExpressions
+	return t >= 0xe0 && t <= 0xff
+}
 
-// Sensor Event Log Record
+// SELRecord Sensor Event Log Record
 type SELRecord interface {
-	// Returns record type
+	// Type Returns record type
 	Type() SELType
-	// Returns record id
+	// ID Returns record id
 	ID() uint16
-	// Returns bytes of the record key and body
+	// Data Returns bytes of the record key and body
 	Data() []byte
 }
 
-// SEL Event Record (Section 32.1)
+// SELEventRecord SEL Event Record (Section 32.1)
 type SELEventRecord struct {
 	data []byte
 
@@ -75,10 +77,10 @@ func (r *SELEventRecord) Unmarshal(buf []byte) ([]byte, error) {
 	return buf[selRecordSize:], nil
 }
 
-// Returns `true'` if it is assertion event.
+// IsAssertionEvent Returns `true` if it is assertion event.
 func (r *SELEventRecord) IsAssertionEvent() bool { return r.EventDir == 0 }
 
-// Returns trigger reading of threshold-base sensor.
+// GetEventTriggerReading Returns trigger reading of threshold-base sensor.
 func (r *SELEventRecord) GetEventTriggerReading() (uint8, bool) {
 	if r.EventType.IsThreshold() && r.EventData1&0xc0 == 0x40 && r.EventData2 != 0xff {
 		return r.EventData2, true
@@ -86,7 +88,7 @@ func (r *SELEventRecord) GetEventTriggerReading() (uint8, bool) {
 	return 0, false
 }
 
-// Returns trigger threshold value of threshold-base sensor.
+// GetEventTriggerThreshold Returns trigger threshold value of threshold-base sensor.
 func (r *SELEventRecord) GetEventTriggerThreshold() (uint8, bool) {
 	if r.EventType.IsThreshold() && r.EventData1&0x30 == 0x10 && r.EventData3 != 0xff {
 		return r.EventData3, true
@@ -94,7 +96,7 @@ func (r *SELEventRecord) GetEventTriggerThreshold() (uint8, bool) {
 	return 0, false
 }
 
-// Returns event description.
+// Description Returns event description.
 func (r *SELEventRecord) Description() string {
 	var f func() (string, bool)
 	switch t := r.EventType; {
@@ -144,7 +146,7 @@ func (r *SELEventRecord) Description() string {
 	}
 }
 
-// Timestamped OEM SEL record (Section 32.2)
+// SELTimestampedOEMRecord Timestamped OEM SEL record (Section 32.2)
 type SELTimestampedOEMRecord struct {
 	data []byte
 
@@ -176,7 +178,7 @@ func (r *SELTimestampedOEMRecord) Unmarshal(buf []byte) ([]byte, error) {
 	return buf[selRecordSize:], nil
 }
 
-// Non-Timestamped OEM SEL record (Section 32.3)
+// SELNonTimestampedOEMRecord Non-Timestamped OEM SEL record (Section 32.3)
 type SELNonTimestampedOEMRecord struct {
 	data []byte
 

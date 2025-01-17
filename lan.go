@@ -9,11 +9,13 @@ import (
 	"net"
 )
 
+//goland:noinspection GoSnakeCaseUsage,GoSnakeCaseUsage
 const (
 	sessionHeaderV1_5Size         = 10 // When authentication type is none
 	sessionHeaderV1_5SizeWithAuth = 26
 )
 
+//goland:noinspection GoSnakeCaseUsage
 type sessionHeaderV1_5 struct {
 	authType      authType
 	sequence      uint32
@@ -41,7 +43,7 @@ func (s *sessionHeaderV1_5) Marshal() ([]byte, error) {
 	buf[0] = byte(s.authType)
 	binary.LittleEndian.PutUint32(buf[1:], s.sequence)
 	binary.LittleEndian.PutUint32(buf[5:], s.id)
-	buf[len(buf)-1] = byte(s.payloadLength)
+	buf[len(buf)-1] = s.payloadLength
 	return buf, nil
 }
 
@@ -75,6 +77,7 @@ func (s *sessionHeaderV1_5) String() string {
 		s.authType, s.sequence, s.id, s.payloadLength, hex.EncodeToString(s.authCode[:]))
 }
 
+//goland:noinspection GoSnakeCaseUsage
 type sessionV1_5 struct {
 	conn     net.Conn
 	args     *Arguments
@@ -167,7 +170,7 @@ func (s *sessionV1_5) openSession() error {
 	// 4. Activate Session
 
 	// TODO
-	return errors.New("Not implemented yet")
+	return errors.New("not implemented yet")
 }
 
 func (s *sessionV1_5) Close() error {
@@ -294,6 +297,7 @@ func (s *sessionV1_5) String() string {
 		s.id, s.sequence, s.rqSeq, s.authType)
 }
 
+//goland:noinspection GoSnakeCaseUsage
 func newSessionV1_5(args *Arguments) session {
 	return &sessionV1_5{
 		args: args,

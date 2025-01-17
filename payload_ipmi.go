@@ -9,7 +9,7 @@ const (
 	ipmiResponseMessageMinSize = 8
 )
 
-// Network Function Codes (Section 5.1)
+// NetFn Network Function Codes (Section 5.1)
 type NetFn uint8
 
 const (
@@ -29,7 +29,7 @@ const (
 	NetFnTransportRes
 )
 
-// Network Function and Logical Unit Number
+// NetFnRsLUN Network Function and Logical Unit Number
 type NetFnRsLUN uint8
 
 func (n NetFnRsLUN) NetFn() NetFn {

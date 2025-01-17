@@ -1,6 +1,6 @@
 package ipmigo
 
-// Get Sensor Reading Command (Section 35.14)
+// GetSensorReadingCommand Get Sensor Reading Command (Section 35.14)
 type GetSensorReadingCommand struct {
 	// Request Data
 	RsLUN        uint8
@@ -45,12 +45,12 @@ func (c *GetSensorReadingCommand) Unmarshal(buf []byte) ([]byte, error) {
 	return nil, nil
 }
 
-// Returns `true` if `SensorReading` is valid.
+// IsValid Returns `true` if `SensorReading` is valid.
 func (c *GetSensorReadingCommand) IsValid() bool {
 	return !(c.ReadingUnavailable || c.ScanningDisabled)
 }
 
-// Returns the threshold status if sensor is threshold-base.
+// ThresholdStatus Returns the threshold status if sensor is threshold-base.
 func (c *GetSensorReadingCommand) ThresholdStatus() ThresholdStatus {
 	return NewThresholdStatus(c.SensorData2)
 }

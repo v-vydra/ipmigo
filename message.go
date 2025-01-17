@@ -79,7 +79,7 @@ func unmarshalMessage(buf []byte) (response, []byte, error) {
 			pkt.Response = &rakpMessage4{}
 		default:
 			return nil, nil, &MessageError{
-				Message: fmt.Sprintf("Unknown IPMI payload type : %s", hdr.PayloadType()),
+				Message: fmt.Sprintf("Unknown IPMI payload type : %d", uint8(hdr.PayloadType())),
 				Detail:  pkt.String(),
 			}
 		}

@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-// Get Chassis Status Command (Section 28.2)
+// GetChassisStatusCommand Get Chassis Status Command (Section 28.2)
 type GetChassisStatusCommand struct {
 	// Response Data
 	PowerIsOn               bool
@@ -55,7 +55,7 @@ func (c *GetChassisStatusCommand) Unmarshal(buf []byte) ([]byte, error) {
 	return nil, nil
 }
 
-// Get System Restart Cause Command (Section 28.11)
+// GetSystemRestartCauseCommand Get System Restart Cause Command (Section 28.11)
 type GetSystemRestartCauseCommand struct {
 	// Response Data
 	RestartCause uint8 // (See Table 28-11)
@@ -79,7 +79,7 @@ func (c *GetSystemRestartCauseCommand) Unmarshal(buf []byte) ([]byte, error) {
 	return buf[1:], nil
 }
 
-// Get POH Counter Command (Section 28.14)
+// GetPOHCounterCommand Get POH Counter Command (Section 28.14)
 type GetPOHCounterCommand struct {
 	// Response Data
 	MinutesPerCount uint8
@@ -96,7 +96,7 @@ func (c *GetPOHCounterCommand) Unmarshal(buf []byte) ([]byte, error) {
 	if err := cmdValidateLength(c, buf, 5); err != nil {
 		return nil, err
 	}
-	c.MinutesPerCount = uint8(buf[0])
+	c.MinutesPerCount = buf[0]
 	c.Counter = binary.LittleEndian.Uint32(buf[1:5])
 	return buf[5:], nil
 }

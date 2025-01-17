@@ -50,6 +50,7 @@ func (a authAlgorithm) String() string {
 // Integrity Algorithm (Section 13.28.4)
 type integrityAlgorithm uint8
 
+//goland:noinspection GoSnakeCaseUsage,GoSnakeCaseUsage,GoSnakeCaseUsage
 const (
 	integrityNone integrityAlgorithm = iota
 	integrityHmacSHA1_96
@@ -75,6 +76,7 @@ func (a integrityAlgorithm) String() string {
 // Confidentiality Algorithm (Section 13.28.5)
 type cryptAlgorithm uint8
 
+//goland:noinspection GoSnakeCaseUsage,GoSnakeCaseUsage,GoSnakeCaseUsage
 const (
 	cryptNone cryptAlgorithm = iota
 	cryptAesCBC_128

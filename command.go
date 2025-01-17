@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-// Completion Code (Section 5.2)
+// CompletionCode Completion Code (Section 5.2)
 type CompletionCode uint8
 
 const (

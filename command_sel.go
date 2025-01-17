@@ -4,7 +4,7 @@ import (
 	"encoding/binary"
 )
 
-// Get SEL Info (Section 31.2)
+// GetSELInfoCommand Get SEL Info (Section 31.2)
 type GetSELInfoCommand struct {
 	// Response Data
 	SELVersion        uint8
@@ -48,7 +48,7 @@ func (c *GetSELInfoCommand) Unmarshal(buf []byte) ([]byte, error) {
 	return buf[14:], nil
 }
 
-// Reserve SEL Command (Section 31.4)
+// ReserveSELCommand Reserve SEL Command (Section 31.4)
 type ReserveSELCommand struct {
 	// Response Data
 	ReservationID uint16
@@ -72,7 +72,7 @@ func (c *ReserveSELCommand) Unmarshal(buf []byte) ([]byte, error) {
 	return buf[2:], nil
 }
 
-// Get SEL Entry Command (Section 31.5)
+// GetSELEntryCommand Get SEL Entry Command (Section 31.5)
 type GetSELEntryCommand struct {
 	// Request Data
 	ReservationID uint16
@@ -92,7 +92,7 @@ func (c *GetSELEntryCommand) String() string         { return cmdToJSON(c) }
 
 func (c *GetSELEntryCommand) Marshal() ([]byte, error) {
 	return []byte{byte(c.ReservationID), byte(c.ReservationID >> 8), byte(c.RecordID), byte(c.RecordID >> 8),
-		byte(c.RecordOffset), byte(c.ReadBytes)}, nil
+		c.RecordOffset, c.ReadBytes}, nil
 }
 
 func (c *GetSELEntryCommand) Unmarshal(buf []byte) ([]byte, error) {

@@ -1,6 +1,6 @@
 package ipmigo
 
-// Event/Reading Type (Table 42-2)
+// EventType Event/Reading Type (Table 42-2)
 type EventType uint8
 
 func (e EventType) IsUnspecified() bool    { return e == 0x00 }

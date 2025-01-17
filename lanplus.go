@@ -14,12 +14,14 @@ import (
 	"net"
 )
 
+//goland:noinspection GoSnakeCaseUsage
 const (
 	consoleID uint32 = 0x49504d49 // 'IPMI'
 
 	sessionHeaderV2_0Size = 12 // When payload type is not OEM
 )
 
+//goland:noinspection GoSnakeCaseUsage
 type sessionHeaderV2_0 struct {
 	authType      authType
 	payloadType   payloadType
@@ -66,6 +68,7 @@ func (s *sessionHeaderV2_0) String() string {
 		s.authType, s.payloadType, s.id, s.sequence, s.payloadLength)
 }
 
+//goland:noinspection GoSnakeCaseUsage
 type sessionV2_0 struct {
 	conn     net.Conn
 	args     *Arguments
@@ -493,6 +496,7 @@ func (s *sessionV2_0) String() string {
 		s.id, s.sequence, s.rqSeq, hex.EncodeToString(s.k1), hex.EncodeToString(s.k2))
 }
 
+//goland:noinspection GoSnakeCaseUsage
 func newSessionV2_0(args *Arguments) session {
 	return &sessionV2_0{
 		args: args,

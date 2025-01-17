@@ -21,7 +21,7 @@ const (
 	sdrFRUDeviceLocatorSize = 11
 )
 
-// Sensor Data Record Type
+// SDRType Sensor Data Record Type
 type SDRType uint8
 
 const (
@@ -61,13 +61,13 @@ func (r *sdrHeader) Unmarshal(buf []byte) ([]byte, error) {
 	return buf[sdrHeaderSize:], nil
 }
 
-// Sensor Data Record
+// SDR Sensor Data Record
 type SDR interface {
-	// Returns record type
+	// Type Returns record type
 	Type() SDRType
-	// Returns record id
+	// ID Returns record id
 	ID() uint16
-	// Returns bytes of the record key and body
+	// Data Returns bytes of the record key and body
 	Data() []byte
 }
 
@@ -86,7 +86,7 @@ func (r *sdrRaw) Unmarshal(buf []byte) ([]byte, error) {
 	return nil, nil
 }
 
-// Intersection of FullSensor and CompactSensor
+// SDRCommonSensor Intersection of FullSensor and CompactSensor
 type SDRCommonSensor struct {
 	args   *Arguments
 	header *sdrHeader
@@ -206,7 +206,7 @@ func (r *SDRCommonSensor) UnitString() string {
 	return s
 }
 
-// Full Sensor Record (Section 43.1)
+// SDRFullSensor Full Sensor Record (Section 43.1)
 type SDRFullSensor struct {
 	SDRCommonSensor
 
@@ -302,12 +302,12 @@ func (r *SDRFullSensor) SensorID() string {
 	return decodeSensorID(r.IDType, r.IDString)
 }
 
-// Returns `true` if sensor is threshold-base.
+// IsThresholdBaseSensor Returns `true` if sensor is threshold-base.
 func (r *SDRFullSensor) IsThresholdBaseSensor() bool {
 	return r.EventReadingType == 0x01
 }
 
-// Returns `true` if sensor has an analog reading.
+// IsAnalogReading Returns `true` if sensor has an analog reading.
 func (r *SDRFullSensor) IsAnalogReading() bool {
 	// There is a discrete sensor that returns an analog reading.
 	if r.args != nil && r.args.Discretereading {
@@ -319,7 +319,7 @@ func (r *SDRFullSensor) IsAnalogReading() bool {
 	return r.SensorUnits.Analog < 0x03 && r.IsThresholdBaseSensor()
 }
 
-// Returns converted sensor reading.
+// ConvertSensorReading Returns converted sensor reading.
 func (r *SDRFullSensor) ConvertSensorReading(value uint8) float64 {
 	var result float64
 
@@ -372,7 +372,7 @@ func (r *SDRFullSensor) ConvertSensorReading(value uint8) float64 {
 	}
 }
 
-// Compact Sensor Record (Section 43.2)
+// SDRCompactSensor Compact Sensor Record (Section 43.2)
 type SDRCompactSensor struct {
 	SDRCommonSensor
 
@@ -430,7 +430,7 @@ func (r *SDRCompactSensor) SensorID() string {
 	return decodeSensorID(r.IDType, r.IDString)
 }
 
-// FRU Device Locator Record (Section 43.8)
+// SDRFRUDeviceLocator FRU Device Locator Record (Section 43.8)
 type SDRFRUDeviceLocator struct {
 	header *sdrHeader
 	data   []byte
@@ -591,12 +591,12 @@ func sdrGetRecord(c *Client, reservation uint16, header *sdrHeader) (SDR, error)
 	}
 }
 
-// Returns all sensor records from SDR repository.
+// SDRGetAllRecordsRepo Returns all sensor records from SDR repository.
 func SDRGetAllRecordsRepo(c *Client) ([]SDR, error) {
 	return SDRGetRecordsRepo(c, nil)
 }
 
-// Returns sensor records from SDR repository.
+// SDRGetRecordsRepo Returns sensor records from SDR repository.
 func SDRGetRecordsRepo(c *Client, filter func(id uint16, t SDRType) bool) ([]SDR, error) {
 	gic := &GetSDRRepositoryInfoCommand{}
 	if err := c.Execute(gic); err != nil {
