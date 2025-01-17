@@ -13,6 +13,9 @@ const (
 	CompletionOK               CompletionCode = 0x00
 	CompletionUnspecifiedError CompletionCode = 0xff
 
+	CompletionRequestedFRUDeviceNotPresent CompletionCode = 0x80
+	CompletionFRUDeviceBusy                CompletionCode = 0x81
+
 	CompletionNodeBusy CompletionCode = iota + 0xc0
 	CompletionInvalidCommand
 	CompletionInvalidCommandForLUN
@@ -26,7 +29,7 @@ const (
 	CompletionCantReturnDataBytes
 	CompletionRequestDataNotPresent
 	CompletionInvalidDataField
-	CompletionIllegalSendorOrRecord
+	CompletionIllegalSensorOrRecord
 	CompletionCantBeProvided
 	CompletionDuplicatedRequest
 	CompletionSDRInUpdateMode
@@ -44,6 +47,12 @@ func (c CompletionCode) String() string {
 		return "Command Completed Normally"
 	case CompletionUnspecifiedError:
 		return "Unspecified error"
+
+	case CompletionRequestedFRUDeviceNotPresent:
+		return "Requested FRU Device Not Present"
+	case CompletionFRUDeviceBusy:
+		return "FRU Device Busy"
+
 	case CompletionNodeBusy:
 		return "Node Busy"
 	case CompletionInvalidCommand:
@@ -70,7 +79,7 @@ func (c CompletionCode) String() string {
 		return "Requested Sensor, data, or record not present"
 	case CompletionInvalidDataField:
 		return "Invalid data field in Request"
-	case CompletionIllegalSendorOrRecord:
+	case CompletionIllegalSensorOrRecord:
 		return "Command illegal for specified sensor or record type"
 	case CompletionCantBeProvided:
 		return "Command response could not be provided"
@@ -91,7 +100,7 @@ func (c CompletionCode) String() string {
 	case CompletionIllegalCommandDisabled:
 		return "Command sub-function has been disabled or is unavailable"
 	default:
-		return fmt.Sprintf("0x%02x", c)
+		return fmt.Sprintf("0x%02x", uint8(c))
 	}
 }
 
