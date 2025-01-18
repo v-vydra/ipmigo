@@ -4,11 +4,20 @@ ipmigo
 **Work In Progress**
 
 About
------------------
+-----
 
 __Forked from [github.com/k-sone/ipmigo](github.com/k-sone/ipmigo)__
 
 ipmigo is a golang implementation for IPMI client.
+
+ChangeLog
+---------
+2025-01-18
+* added SetSDRReadingBytes and SetFRUReadingBytes for faster SDR and FRU areas reading (SDR/FRU defaults: 32/16 - works for my 255/63)
+* added FRU Board and Product Areas handling - ToDo: Chassis and MultiRecord Areas
+* added example how to retrieve all devices FRU Board and Product area information [examples/fru/fru.go](https://github.com/v-vydra/ipmigo/examples/fru.go])
+2025-01-17  
+* added IPMI FRU InventoryAreaInfo and Data command
 
 Supported Version
 -----------------

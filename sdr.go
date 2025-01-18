@@ -19,6 +19,8 @@ const (
 	sdrFullSensorSize       = 25 + sdrCommonSensorSize
 	sdrCompactSensorSize    = 9 + sdrCommonSensorSize
 	sdrFRUDeviceLocatorSize = 11
+
+	fruDefaultReadBytes = 16 // nowadays 63 should be ok
 )
 
 // SDRType Sensor Data Record Type
@@ -436,9 +438,9 @@ type SDRFRUDeviceLocator struct {
 	data   []byte
 
 	SlaveAddress       uint8
-	DeviceID           uint8
-	BusID              uint8
-	AccessLUN          uint8
+	DeviceID           uint8 // FRU Device ID
+	BusID              uint8 // bit 7 = 1 indicates device is access using Read/Write FRU Data commands
+	AccessLUN          uint8 // LUN bits 4:3
 	Logical            bool
 	ChannelNumber      uint8
 	DeviceType         uint8

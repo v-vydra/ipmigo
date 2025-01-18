@@ -8,6 +8,7 @@ import (
 type GetFRUInventoryAreaInfoCommand struct {
 	// Request Data
 	DeviceID uint8
+	Lun      uint8 // most of the cases 0
 
 	// Response Data
 	FruSize       uint16 // FRU Inventory area size in bytes
@@ -18,7 +19,7 @@ func (c *GetFRUInventoryAreaInfoCommand) Name() string { return "Get FRU Invento
 func (c *GetFRUInventoryAreaInfoCommand) Code() uint8  { return 0x10 }
 
 func (c *GetFRUInventoryAreaInfoCommand) NetFnRsLUN() NetFnRsLUN {
-	return NewNetFnRsLUN(NetFnStorageReq, 0)
+	return NewNetFnRsLUN(NetFnStorageReq, c.Lun)
 }
 
 func (c *GetFRUInventoryAreaInfoCommand) String() string           { return cmdToJSON(c) }
@@ -40,6 +41,7 @@ func (c *GetFRUInventoryAreaInfoCommand) Unmarshal(buf []byte) ([]byte, error) {
 type GetFRUDataCommand struct {
 	// Request Data
 	DeviceID     uint8  // FRU Device ID. FFh = reserved.
+	Lun          uint8  // should be 0
 	Offset       uint16 // Offset is in bytes or words per device access type returned in the Get FRU Inventory Area Info command.
 	CountRequest uint8  // Count to read (16?)
 
@@ -52,7 +54,7 @@ func (c *GetFRUDataCommand) Name() string { return "Read FRU Data Command" }
 func (c *GetFRUDataCommand) Code() uint8  { return 0x11 }
 
 func (c *GetFRUDataCommand) NetFnRsLUN() NetFnRsLUN {
-	return NewNetFnRsLUN(NetFnStorageReq, 0)
+	return NewNetFnRsLUN(NetFnStorageReq, c.Lun)
 }
 
 func (c *GetFRUDataCommand) String() string { return cmdToJSON(c) }

@@ -126,12 +126,26 @@ type Client struct {
 	args    *Arguments
 
 	sdrReadingBytes uint8 // for GetSDRCommand(byte to read of each BMC)
+	fruReadingBytes uint8 // max bytes which can be read when accessing FRU data (default 16)
 }
 
 func (c *Client) Ping() error               { return c.session.Ping() }
 func (c *Client) Open() error               { return c.session.Open() }
 func (c *Client) Close() error              { return c.session.Close() }
 func (c *Client) Execute(cmd Command) error { return c.session.Execute(cmd) }
+
+func (c *Client) GetSDRReadingBytes() uint8 { return c.sdrReadingBytes }
+func (c *Client) SetSDRReadingBytes(n uint8) {
+	if n > 0 && n <= 255 {
+		c.sdrReadingBytes = n
+	}
+}
+func (c *Client) GetFRUReadingBytes() uint8 { return c.fruReadingBytes }
+func (c *Client) SetFRUReadingBytes(n uint8) {
+	if n > 0 && n <= 255 {
+		c.fruReadingBytes = n
+	}
+}
 
 // NewClient Create an IPMI Client
 func NewClient(args Arguments) (*Client, error) {
@@ -147,5 +161,5 @@ func NewClient(args Arguments) (*Client, error) {
 	case V2_0:
 		s = newSessionV2_0(&args)
 	}
-	return &Client{session: s, args: &args, sdrReadingBytes: sdrDefaultReadBytes}, nil
+	return &Client{session: s, args: &args, sdrReadingBytes: sdrDefaultReadBytes, fruReadingBytes: fruDefaultReadBytes}, nil
 }
