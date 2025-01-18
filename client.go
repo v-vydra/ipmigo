@@ -135,12 +135,16 @@ func (c *Client) Close() error              { return c.session.Close() }
 func (c *Client) Execute(cmd Command) error { return c.session.Execute(cmd) }
 
 func (c *Client) GetSDRReadingBytes() uint8 { return c.sdrReadingBytes }
+
+// SetSDRReadingBytes allow to change default max bytes read at one call for SDR, default 32
 func (c *Client) SetSDRReadingBytes(n uint8) {
 	if n > 0 && n <= 255 {
 		c.sdrReadingBytes = n
 	}
 }
 func (c *Client) GetFRUReadingBytes() uint8 { return c.fruReadingBytes }
+
+// SetFRUReadingBytes allow to change default max bytes read at one call for FRU - default 16, 63 should work
 func (c *Client) SetFRUReadingBytes(n uint8) {
 	if n > 0 && n <= 255 {
 		c.fruReadingBytes = n

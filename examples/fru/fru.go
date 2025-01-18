@@ -8,9 +8,8 @@ import (
 
 func main() {
 	c, err := ipmigo.NewClient(ipmigo.Arguments{
-		Version: ipmigo.V2_0,
-		Address: "172.30.1.241:623",
-		//Address:       "198.18.2.197:623",
+		Version:       ipmigo.V2_0,
+		Address:       "172.30.1.241:623",
 		Timeout:       3 * time.Second,
 		Retries:       3,
 		Username:      "root",
