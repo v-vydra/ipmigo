@@ -152,7 +152,7 @@ func (f *FRUDeviceData) ParseProductInfoArea() error {
 }
 func (f *FRUDeviceData) GetBoardInfoAreaFieldsAsString() string {
 	if f.BoardInfo != nil {
-		return f.BoardInfo.String()
+		return fmt.Sprintf("Manufacture Date   : %s\n%s\n", f.BoardInfo.ManufactureDateTime.Format(time.DateTime), f.BoardInfo.String())
 	} else {
 		return "  no Board Info Area not found\n"
 	}
