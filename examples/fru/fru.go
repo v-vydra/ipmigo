@@ -30,6 +30,9 @@ func main() {
 	}
 	defer c.Close()
 
+	// temporary fix for IPMI devices which don't list main device id 0 in SDR, ex.: HPE iLO Builtin FRU Device 0
+	foundMainDevice := false
+
 	// Get sensor records
 	records, err := ipmigo.SDRGetRecordsRepo(c, func(id uint16, t ipmigo.SDRType) bool {
 		return t == ipmigo.SDRTypeFRUDeviceLocator
@@ -47,8 +50,34 @@ func main() {
 				fmt.Println(err)
 				return
 			}
-			fmt.Printf("%s\n", fru.String())
+			// if well defined:
+			//fmt.Printf("%s\n", fru.ToString())
+
+			// list all
+			fmt.Printf("Board Info Area\n%sProduct Info Area\n%s\n",
+				fru.GetBoardInfoAreaAsString(),
+				fru.GetProductInfoAreaFieldsAsString(),
+			)
+
+			if s.DeviceID == 0 {
+				foundMainDevice = true
+			}
 		}
 	}
 
+	// temporary fix for IPMI devices which don't list main device id 0 in SDR, ex.: HPE iLO Builtin FRU Device 0
+	if !foundMainDevice {
+		fmt.Printf("Warning: No device with ID 0 found in SDR - attempt to get directly\n")
+		fru, err := ipmigo.FRUGetDeviceData(c, 0, 0)
+		if err != nil {
+			fmt.Printf("Warning: Device ID 0 is really missing on this system: %v\n", err)
+		} else {
+			fmt.Printf("%s\n", fru.CommonHeader.ToString())
+			fmt.Printf("Board Info Area\n%sProduct Info Area\n%s\n",
+				fru.GetBoardInfoAreaAsString(),
+				fru.GetProductInfoAreaFieldsAsString(),
+			)
+
+		}
+	}
 }
