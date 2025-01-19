@@ -150,9 +150,18 @@ func (f *FRUDeviceData) ParseProductInfoArea() error {
 	f.ProductInfo = nil
 	return nil
 }
+func (f *FRUDeviceData) GetBoardInfoAreaAsString() string {
+	if f.BoardInfo != nil {
+		return fmt.Sprintf("Manufacture Date   : %s\n%s\n",
+			f.BoardInfo.ManufactureDateTime.Format(time.DateTime),
+			f.BoardInfo.String())
+	} else {
+		return f.GetBoardInfoAreaFieldsAsString()
+	}
+}
 func (f *FRUDeviceData) GetBoardInfoAreaFieldsAsString() string {
 	if f.BoardInfo != nil {
-		return fmt.Sprintf("Manufacture Date   : %s\n%s\n", f.BoardInfo.ManufactureDateTime.Format(time.DateTime), f.BoardInfo.String())
+		return f.BoardInfo.String()
 	} else {
 		return "  no Board Info Area not found\n"
 	}
