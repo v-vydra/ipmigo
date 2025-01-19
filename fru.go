@@ -86,14 +86,18 @@ func (f *FRUDeviceData) ToStringDebug() string {
 func (f *FRUDeviceData) ToString() string {
 	var res string
 	if f.BoardInfo != nil {
-		res += "\n" + f.BoardInfo.ToString()
+		res += f.BoardInfo.ToString()
 	}
 	if f.ProductInfo != nil {
 		res += "\n" + f.ProductInfo.ToString()
 	}
 	return res
 }
-
+func (f *FRUDeviceData) String() string {
+	res := "Board Info Area:\n" + f.GetBoardInfoAreaFieldsAsString()
+	res += "Product Info Area:\n" + f.GetProductInfoAreaFieldsAsString()
+	return res
+}
 func (f *FRUDeviceData) DebugString() string {
 	return fmt.Sprintf("DeviceID: %d, Lun: %d, DataSize: %d, Data: %s", f.DeviceID, f.Lun, f.DataSize, hex.EncodeToString(f.Data))
 }
@@ -146,6 +150,20 @@ func (f *FRUDeviceData) ParseProductInfoArea() error {
 	}
 	f.ProductInfo = nil
 	return nil
+}
+func (f *FRUDeviceData) GetBoardInfoAreaFieldsAsString() string {
+	if f.BoardInfo != nil {
+		return f.BoardInfo.String()
+	} else {
+		return "no Board Info Area not found\n"
+	}
+}
+func (f *FRUDeviceData) GetProductInfoAreaFieldsAsString() string {
+	if f.ProductInfo != nil {
+		return f.ProductInfo.String()
+	} else {
+		return "no Product Info Area not found\n"
+	}
 }
 
 type FRUBoardInfoArea struct {
@@ -226,6 +244,18 @@ func (f *FRUBoardInfoArea) ToString() string {
 	if len(f.Fields) > 4 {
 		for i := 5; i <= len(f.Fields); i++ {
 			res += fmt.Sprintf("    OEM Field #%d : %s\n", i-4, f.GetFieldValueStringById(uint8(i)))
+		}
+	}
+
+	return res
+}
+func (f *FRUBoardInfoArea) String() string {
+	var res string
+	if len(f.Fields) < 1 {
+		res = "Board Info Area Fields array is empty\n"
+	} else {
+		for i := 1; i <= len(f.Fields); i++ {
+			res += fmt.Sprintf(" Board Field #%d : %s\n", i-1, f.GetFieldValueStringById(uint8(i)))
 		}
 	}
 
@@ -349,6 +379,18 @@ func (f *FRUProductInfoArea) ToString() string {
 	if len(f.Fields) > 5 {
 		for i := 6; i <= len(f.Fields); i++ {
 			res += fmt.Sprintf("    OEM Field #%d : %s\n", i-6, f.GetFieldValueStringById(uint8(i)))
+		}
+	}
+
+	return res
+}
+func (f *FRUProductInfoArea) String() string {
+	var res string
+	if len(f.Fields) < 1 {
+		res = "Product Info Area Fields array is empty\n"
+	} else {
+		for i := 1; i <= len(f.Fields); i++ {
+			res += fmt.Sprintf(" Product Field #%d : %s\n", i-1, f.GetFieldValueStringById(uint8(i)))
 		}
 	}
 
