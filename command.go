@@ -9,36 +9,42 @@ import (
 // CompletionCode Completion Code (Section 5.2)
 type CompletionCode uint8
 
+//goland:noinspection GoCommentStart
 const (
+
+	// GENERIC COMPLETION CODES 00h, C0h-FFh
+
 	CompletionOK               CompletionCode = 0x00
 	CompletionUnspecifiedError CompletionCode = 0xff
 
+	CompletionNodeBusy                 CompletionCode = 0xc0
+	CompletionInvalidCommand           CompletionCode = 0xc1
+	CompletionInvalidCommandForLUN     CompletionCode = 0xc2
+	CompletionTimeout                  CompletionCode = 0xc3
+	CompletionOutOfSpace               CompletionCode = 0xc4
+	CompletionReservationCancelled     CompletionCode = 0xc5
+	CompletionRequestDataTruncated     CompletionCode = 0xc6
+	CompletionRequestDataInvalidLength CompletionCode = 0xc7
+	CompletionRequestDataFieldExceedEd CompletionCode = 0xc8
+	CompletionParameterOutOfRange      CompletionCode = 0xc9
+	CompletionCantReturnDataBytes      CompletionCode = 0xca
+	CompletionRequestDataNotPresent    CompletionCode = 0xcb
+	CompletionInvalidDataField         CompletionCode = 0xcc
+	CompletionIllegalSensorOrRecord    CompletionCode = 0xcd
+	CompletionCantBeProvided           CompletionCode = 0xce
+	CompletionDuplicatedRequest        CompletionCode = 0xcf
+	CompletionSDRInUpdateMode          CompletionCode = 0xd0
+	CompletionFirmwareUpdateMode       CompletionCode = 0xd1
+	CompletionBMCInitialization        CompletionCode = 0xd2
+	CompletionDestinationUnavailable   CompletionCode = 0xd3
+	CompletionInsufficientPrivilege    CompletionCode = 0xd4
+	CompletionNotSupportedPresentState CompletionCode = 0xd5
+	CompletionIllegalCommandDisabled   CompletionCode = 0xd6
+
+	// COMMAND SPECIFIC CODES 80h — BEh
+
 	CompletionRequestedFRUDeviceNotPresent CompletionCode = 0x80
 	CompletionFRUDeviceBusy                CompletionCode = 0x81
-
-	CompletionNodeBusy CompletionCode = iota + 0xc0
-	CompletionInvalidCommand
-	CompletionInvalidCommandForLUN
-	CompletionTimeout
-	CompletionOutOfSpace
-	CompletionReservationCancelled
-	CompletionRequestDataTruncated
-	CompletionRequestDataInvalidLength
-	CompletionRequestDataFieldExceedEd
-	CompletionParameterOutOfRange
-	CompletionCantReturnDataBytes
-	CompletionRequestDataNotPresent
-	CompletionInvalidDataField
-	CompletionIllegalSensorOrRecord
-	CompletionCantBeProvided
-	CompletionDuplicatedRequest
-	CompletionSDRInUpdateMode
-	CompletionFirmwareUpdateMode
-	CompletionBMCInitialization
-	CompletionDestinationUnavailable
-	CompletionInsufficientPrivilege
-	CompletionNotSupportedPresentState
-	CompletionIllegalCommandDisabled
 )
 
 func (c CompletionCode) String() string {
