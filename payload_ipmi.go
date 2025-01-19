@@ -27,6 +27,8 @@ const (
 	NetFnStorageRes
 	NetFnTransportReq
 	NetFnTransportRes
+
+	NetFnOemOne NetFn = 0x30
 )
 
 // NetFnRsLUN Network Function and Logical Unit Number
