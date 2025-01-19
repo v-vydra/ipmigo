@@ -9,6 +9,8 @@ import (
 
 const (
 	fruCommonHeaderSize = 8
+
+	fruDefaultReadBytes = 16 // nowadays 63 should be ok
 )
 
 // FRUCommonHeader Table 8-1, COMMON HEADER

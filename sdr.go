@@ -19,8 +19,6 @@ const (
 	sdrFullSensorSize       = 25 + sdrCommonSensorSize
 	sdrCompactSensorSize    = 9 + sdrCommonSensorSize
 	sdrFRUDeviceLocatorSize = 11
-
-	fruDefaultReadBytes = 16 // nowadays 63 should be ok
 )
 
 // SDRType Sensor Data Record Type
