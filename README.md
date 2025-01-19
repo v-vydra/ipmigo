@@ -13,6 +13,7 @@ ipmigo is a golang implementation for IPMI client.
 ChangeLog
 ---------
 2025-01-19  
+* new SetChassisControlCommand - power control
 * FRU example works on OpenBMC Wistron and HPE iLO iPMI  
 
 2025-01-18  

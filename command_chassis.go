@@ -55,6 +55,34 @@ func (c *GetChassisStatusCommand) Unmarshal(buf []byte) ([]byte, error) {
 	return nil, nil
 }
 
+type ChassisControl uint8
+
+const (
+	ChassisControlPowerDown                ChassisControl = 0x00
+	ChassisControlPowerUp                  ChassisControl = 0x01
+	ChassisControlPowerCycle               ChassisControl = 0x02
+	ChassisControlHardReset                ChassisControl = 0x03
+	ChassisControlPulseDiagnosticInterrupt ChassisControl = 0x04
+	ChassisControlACPISoftShutdown         ChassisControl = 0x05
+)
+
+// SetChassisControlCommand Chassis Control Command (section 28.3)
+type SetChassisControlCommand struct {
+	ChassisControl ChassisControl // see type def
+}
+
+func (c *SetChassisControlCommand) Name() string           { return "Set Chassis Control" }
+func (c *SetChassisControlCommand) Code() uint8            { return 0x02 }
+func (c *SetChassisControlCommand) NetFnRsLUN() NetFnRsLUN { return NewNetFnRsLUN(NetFnChassisReq, 0) }
+func (c *SetChassisControlCommand) String() string         { return cmdToJSON(c) }
+
+func (c *SetChassisControlCommand) Marshal() ([]byte, error) {
+	return []byte{uint8(c.ChassisControl)}, nil
+}
+func (c *SetChassisControlCommand) Unmarshal(buf []byte) ([]byte, error) {
+	return nil, nil
+}
+
 // GetSystemRestartCauseCommand Get System Restart Cause Command (Section 28.11)
 type GetSystemRestartCauseCommand struct {
 	// Response Data
