@@ -1,7 +1,6 @@
 package ipmigo
 
 import (
-	"encoding/binary"
 	"encoding/hex"
 	"fmt"
 	"strings"
@@ -281,13 +280,11 @@ func (f *FRUBoardInfoArea) Unmarshal(buf []byte) ([]byte, error) {
 
 	f.LanguageCode = buf[2]
 
-	mfgTimeRaw := binary.LittleEndian.Uint32(
-		append([]byte{0}, buf[3:6]...),
-	)
-	// The first byte we prepended with 0 to make 4 bytes total
-	// IPMI spec: 0 value => 1/1/1996 00:00 GMT, each increment => +1 minute
-	baseDate := time.Date(1996, 1, 1, 0, 0, 0, 0, time.UTC)
-	f.ManufactureDateTime = baseDate.Add(time.Duration(mfgTimeRaw) * time.Minute)
+	convertDate, err := ConvertBoardMfgDate(buf[3:6])
+	if err != nil {
+		return nil, fmt.Errorf("invalid Board Info area Manufacture Date : %s", err)
+	}
+	f.ManufactureDateTime = convertDate
 
 	// The variable-length fields start at byte (boardOffset + 6)
 	fieldsStart := 6
