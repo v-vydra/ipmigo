@@ -47,7 +47,7 @@ func main() {
 				fmt.Println(err)
 				return
 			}
-			fmt.Printf("%s\n", fru.ToString())
+			fmt.Printf("%s\n", fru.String())
 		}
 	}
 

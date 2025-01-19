@@ -155,14 +155,14 @@ func (f *FRUDeviceData) GetBoardInfoAreaFieldsAsString() string {
 	if f.BoardInfo != nil {
 		return f.BoardInfo.String()
 	} else {
-		return "no Board Info Area not found\n"
+		return "  no Board Info Area not found\n"
 	}
 }
 func (f *FRUDeviceData) GetProductInfoAreaFieldsAsString() string {
 	if f.ProductInfo != nil {
 		return f.ProductInfo.String()
 	} else {
-		return "no Product Info Area not found\n"
+		return "  no Product Info Area not found\n"
 	}
 }
 
