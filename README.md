@@ -13,6 +13,7 @@ ipmigo is a golang implementation for IPMI client.
 ChangeLog
 ---------
 2025-01-19  
+* added GetSetOEMOpenBmcWistronI2CCommand - Read/Write via I2C over iPMI on Wistron's OpenBMC
 * added NetFnOemOne 0x30
 * added chassis power control example [examples/power/power.go](https://github.com/v-vydra/ipmigo/blob/master/examples/power/power.go)
 * new SetChassisControlCommand - power control
