@@ -12,6 +12,14 @@ ipmigo is a golang implementation for IPMI client.
 
 ChangeLog
 ---------
+2025-01-20
+* added GetOEMOpenBmcWistronXcvrPortPageCommand/SetOEMOpenBmcWistronXcvrPortPageCommand - Get/Set XCVR port page RAW data on Wistron OEM OpenBMC  
+    - example at [examples/openbmc-wistron/xcvr-eeprom.go](https://github.com/v-vydra/ipmigo/blob/master/examples/openbmc-wistron/xcvr-eeprom.go)  
+* added GetOEMOpenBmcWistronFirmwareInfoCommand - Wistron OEM OpenBMC Get Firmware Information Command  
+    - example at [examples/openbmc-wistron/fw-version.go](https://github.com/v-vydra/ipmigo/blob/master/examples/openbmc-wistron/fw-version.go)  
+* added GetOEMOpenBmcWistronFanControlCommand/SetOEMOpenBmcWistronFanControlCommand - Wistron OEM OpenBMC Set Fan Speed Control Command  
+  - example at [examples/openbmc-wistron/fan.go](https://github.com/v-vydra/ipmigo/blob/master/examples/openbmc-wistron/fan.go)  
+
 2025-01-19  
 * added GetSetOEMOpenBmcWistronI2CCommand - Read/Write via I2C over iPMI on Wistron's OpenBMC
 * added NetFnOemOne 0x30

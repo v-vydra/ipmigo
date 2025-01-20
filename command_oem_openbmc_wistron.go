@@ -1,6 +1,9 @@
 package ipmigo
 
-import "fmt"
+import (
+	"encoding/hex"
+	"fmt"
+)
 
 // *** OpenBMC Wistron I2C
 
@@ -126,6 +129,123 @@ func (c *SetOEMOpenBmcWistronFanControlCommand) Marshal() ([]byte, error) {
 func (c *SetOEMOpenBmcWistronFanControlCommand) Unmarshal(buf []byte) ([]byte, error) {
 	if err := cmdValidateLength(c, buf, 0); err != nil {
 		return nil, err
+	}
+
+	return nil, nil
+}
+
+// ** Firmware
+
+// GetOEMOpenBmcWistronFirmwareInfoCommand Wistron OEM OpenBMC Get Firmware Information Command
+type GetOEMOpenBmcWistronFirmwareInfoCommand struct {
+	// Request Data
+	DevId uint8 // 1 == Primary BMC, 2 == Backup BMC, 3..5 == CPLD0..2, 6 == FANCLPD....
+
+	// Response Data == Firmware Version
+	Major uint8
+	Minor uint8
+	Build uint8
+}
+
+func (c *GetOEMOpenBmcWistronFirmwareInfoCommand) GetFirmwareString() string {
+	return fmt.Sprintf("%d.%d.%d", c.Major, c.Minor, c.Build)
+}
+
+func (c *GetOEMOpenBmcWistronFirmwareInfoCommand) Name() string {
+	return "Firmware Information Command on Wistron OpenBMC"
+}
+func (c *GetOEMOpenBmcWistronFirmwareInfoCommand) Code() uint8 { return 0x20 }
+
+func (c *GetOEMOpenBmcWistronFirmwareInfoCommand) NetFnRsLUN() NetFnRsLUN {
+	return NewNetFnRsLUN(NetFnOemOne, 0)
+}
+
+func (c *GetOEMOpenBmcWistronFirmwareInfoCommand) String() string { return cmdToJSON(c) }
+func (c *GetOEMOpenBmcWistronFirmwareInfoCommand) Marshal() ([]byte, error) {
+	return []byte{c.DevId}, nil
+}
+
+func (c *GetOEMOpenBmcWistronFirmwareInfoCommand) Unmarshal(buf []byte) ([]byte, error) {
+	if err := cmdValidateLength(c, buf, 3); err != nil {
+		return nil, err
+	}
+	c.Major = buf[0]
+	c.Minor = buf[1]
+	c.Build = buf[2]
+
+	return nil, nil
+}
+
+// ** XCVR port page data access
+
+// ** get
+
+// GetOEMOpenBmcWistronXcvrPortPageCommand Get XCVR port page RAW data
+type GetOEMOpenBmcWistronXcvrPortPageCommand struct {
+	// Request Data
+	Port     uint8 // XCVR port 0..
+	Function uint8 // 1 == CMIS RAW Data
+	Page     uint8 // page to get for XCVR in Port
+	Offset   uint8 // starting offset on Page
+	Length   uint8 // how many bytes to read
+
+	// Response Data
+	Data []byte // Raw Length bytes at Offset for Port
+}
+
+func (c *GetOEMOpenBmcWistronXcvrPortPageCommand) Name() string { return "Get XCVR Data" }
+func (c *GetOEMOpenBmcWistronXcvrPortPageCommand) Code() uint8  { return 0x41 }
+
+func (c *GetOEMOpenBmcWistronXcvrPortPageCommand) NetFnRsLUN() NetFnRsLUN {
+	return NewNetFnRsLUN(NetFnOemOne, 0)
+}
+func (c *GetOEMOpenBmcWistronXcvrPortPageCommand) Output() []byte { return c.Data }
+func (c *GetOEMOpenBmcWistronXcvrPortPageCommand) String() string { return cmdToJSON(c) }
+func (c *GetOEMOpenBmcWistronXcvrPortPageCommand) Marshal() ([]byte, error) {
+	return []byte{c.Port, c.Function, c.Page, c.Offset, c.Length}, nil
+}
+
+func (c *GetOEMOpenBmcWistronXcvrPortPageCommand) Unmarshal(buf []byte) ([]byte, error) {
+	if len(buf) != int(c.Length) {
+		return nil, fmt.Errorf("invalid %s response size : %d/%d", c.Name(), len(buf), c.Length)
+	}
+
+	c.Data = buf
+
+	return nil, nil
+}
+
+type SetOEMOpenBmcWistronXcvrPortPageCommand struct {
+	// Request Data
+	Port      uint8  // XCVR port 0..
+	Function  uint8  // 1 == CMIS RAW Data
+	Page      uint8  // page to set for XCVR in Port
+	Offset    uint8  // starting offset on Page
+	DataWrite []byte // new data to write
+
+	// Response Data
+}
+
+func (c *SetOEMOpenBmcWistronXcvrPortPageCommand) Name() string { return "Set XCVR Data" }
+func (c *SetOEMOpenBmcWistronXcvrPortPageCommand) Code() uint8  { return 0x40 }
+
+func (c *SetOEMOpenBmcWistronXcvrPortPageCommand) NetFnRsLUN() NetFnRsLUN {
+	return NewNetFnRsLUN(NetFnOemOne, 0)
+}
+
+func (c *SetOEMOpenBmcWistronXcvrPortPageCommand) String() string { return cmdToJSON(c) }
+func (c *SetOEMOpenBmcWistronXcvrPortPageCommand) Marshal() ([]byte, error) {
+	if len(c.DataWrite) == 0 {
+		return nil, fmt.Errorf("empty data to write for %s on Port %d at Page %d and Offset %d", c.Name(), c.Port, c.Page, c.Offset)
+	}
+	cmd := []byte{c.Port, c.Function, c.Page, c.Offset}
+	cmd = append(cmd, c.DataWrite...)
+	return cmd, nil
+}
+
+func (c *SetOEMOpenBmcWistronXcvrPortPageCommand) Unmarshal(buf []byte) ([]byte, error) {
+	if len(buf) != 0 {
+		return nil, fmt.Errorf("invalid %s response size : %d/%d [%s]", c.Name(), len(buf), 0, hex.EncodeToString(buf))
 	}
 
 	return nil, nil
