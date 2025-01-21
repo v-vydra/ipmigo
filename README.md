@@ -1,17 +1,24 @@
 ipmigo
 ======
 
-**Work In Progress**
+_Work in progress_, but I use it personally as it is now in git _without any issues_. 
 
 About
 -----
 
+**ipmigo** is a golang implementation of **IPMI** client. 
+
 __Forked from [github.com/k-sone/ipmigo](github.com/k-sone/ipmigo)__
 
-ipmigo is a golang implementation for IPMI client.
+All new functionality is tested against Wistron OpenBMC OEM IPMI + for functionality not depending on OEM, most of the time, also validating against HPE iLO IPMI and Supermicro IPMI.
 
 ChangeLog
 ---------
+2025-01-21  
+* added ClearSELCommand - Clear SEL Command  
+* added helper function ClearSELWaitFinish - will initiate SEL Erase and wait maxWaitSeconds to complete  
+  - example at [examples/sel/sel-clear.go](https://github.com/v-vydra/ipmigo/blob/master/examples/sel/sel-clear.go)  
+
 2025-01-20
 * added GetOEMOpenBmcWistronXcvrPortPageCommand/SetOEMOpenBmcWistronXcvrPortPageCommand - Get/Set XCVR port page RAW data on Wistron OEM OpenBMC  
     - example at [examples/openbmc-wistron/xcvr-eeprom.go](https://github.com/v-vydra/ipmigo/blob/master/examples/openbmc-wistron/xcvr-eeprom.go)  

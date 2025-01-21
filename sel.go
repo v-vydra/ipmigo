@@ -4,6 +4,7 @@ import (
 	"encoding/binary"
 	"encoding/hex"
 	"fmt"
+	"time"
 )
 
 const (
@@ -297,4 +298,43 @@ func SELGetEntries(c *Client, offset, num int) (records []SELRecord, total int, 
 		records = records[l-num:]
 	}
 	return
+}
+
+// ** Clear SEL
+
+// ClearSELWaitFinish Initiate SEL Erase and wait maxWaitSeconds to complete
+func ClearSELWaitFinish(c *Client, maxWaitSeconds uint8) error {
+	// First we have to get the SEL reservation ID
+	CmdReserveSELCommand := &ReserveSELCommand{}
+	if err := c.Execute(CmdReserveSELCommand); err != nil {
+		return err
+	}
+
+	// Initiate erasure
+	cmdClearSEL := &ClearSELCommand{
+		ReservationID: CmdReserveSELCommand.ReservationID,
+		Action:        ClearSELActionInitialErase,
+	}
+	if err := c.Execute(cmdClearSEL); err != nil {
+		return err
+	}
+
+	// wait till erasure completed - show progress
+	cmdClearSEL.Action = ClearSELActionGetErasureStatus
+	var waitedSeconds uint8 = 0
+	for cmdClearSEL.ErasureProgress.IsErasureInProgress() {
+		if waitedSeconds >= maxWaitSeconds {
+			break
+		}
+		waitedSeconds++
+		time.Sleep(1 * time.Second)
+		if err := c.Execute(cmdClearSEL); err != nil {
+			return err
+		}
+	}
+	if !cmdClearSEL.ErasureProgress.IsEraseCompleted() {
+		return fmt.Errorf("erasure failed to complete in %d seconds, current erasure status: %s", waitedSeconds, cmdClearSEL.ErasureProgress)
+	}
+
+	return nil
 }

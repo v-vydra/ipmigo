@@ -2,6 +2,7 @@ package ipmigo
 
 import (
 	"encoding/binary"
+	"fmt"
 )
 
 // GetSELInfoCommand Get SEL Info (Section 31.2)
@@ -111,4 +112,66 @@ func (c *GetSELEntryCommand) Unmarshal(buf []byte) ([]byte, error) {
 		copy(c.RecordData, buf)
 		return buf[c.ReadBytes:], nil
 	}
+}
+
+// ** Clear SEL
+
+type ClearSELAction uint8
+
+const (
+	ClearSELActionInitialErase     ClearSELAction = 0xAA
+	ClearSELActionGetErasureStatus ClearSELAction = 0x00
+	EraseAll
+)
+
+type ClearSELErasureProgress uint8
+
+func (c ClearSELErasureProgress) String() string {
+	switch c {
+	case 0x00:
+
+		return "erasure in progress"
+	case 0x01:
+		return "erase completed"
+	default:
+		return fmt.Sprintf("unknown progress [0x%00x]", uint8(c))
+	}
+}
+func (c ClearSELErasureProgress) IsErasureInProgress() bool {
+	return c == 0x00
+}
+func (c ClearSELErasureProgress) IsEraseCompleted() bool {
+	return c == 0x01
+}
+
+// ClearSELCommand Clear SEL Command (Section 31.9)
+type ClearSELCommand struct {
+	// Request Data
+	ReservationID uint16
+	Action        ClearSELAction
+
+	// Response Data
+	ErasureProgress ClearSELErasureProgress // bits 3-0, 0h == erasure in progress, 1h == erase completed
+}
+
+func (c *ClearSELCommand) Name() string { return "Clear SEL Command" }
+func (c *ClearSELCommand) Code() uint8  { return 0x47 }
+
+func (c *ClearSELCommand) NetFnRsLUN() NetFnRsLUN { return NewNetFnRsLUN(NetFnStorageReq, 0) }
+
+func (c *ClearSELCommand) String() string { return cmdToJSON(c) }
+func (c *ClearSELCommand) Marshal() ([]byte, error) {
+	return []byte{
+		byte(c.ReservationID), byte(c.ReservationID >> 8), // LSB byte first
+		0x43, 0x4c, 0x52, // C L R
+		uint8(c.Action),
+	}, nil
+}
+
+func (c *ClearSELCommand) Unmarshal(buf []byte) ([]byte, error) {
+	if err := cmdValidateLength(c, buf, 1); err != nil {
+		return nil, err
+	}
+	c.ErasureProgress = ClearSELErasureProgress(buf[0] & 0x0F) // bits 3:0
+	return nil, nil
 }
