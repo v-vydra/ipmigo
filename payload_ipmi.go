@@ -12,23 +12,25 @@ const (
 // NetFn Network Function Codes (Section 5.1)
 type NetFn uint8
 
-const (
-	NetFnChassisReq NetFn = iota
-	NetFnChassisRes
-	NetFnBridgeReq
-	NetFnBridgeRes
-	NetFnSensorReq
-	NetFnSensorRes
-	NetFnAppReq
-	NetFnAppRes
-	NetFnFirmwareReq
-	NetFnFirmwareRes
-	NetFnStorageReq
-	NetFnStorageRes
-	NetFnTransportReq
-	NetFnTransportRes
+// Table 5-1, Network Function Codes
 
-	NetFnOemOne NetFn = 0x30
+const (
+	NetFnChassisReq   NetFn = 0x00 // Chassis Device request and response
+	NetFnChassisRes   NetFn = 0x01
+	NetFnBridgeReq    NetFn = 0x02 // Bridge
+	NetFnBridgeRes    NetFn = 0x03
+	NetFnSensorReq    NetFn = 0x04 // Sensor and Event
+	NetFnSensorRes    NetFn = 0x05
+	NetFnAppReq       NetFn = 0x06 // Application
+	NetFnAppRes       NetFn = 0x07
+	NetFnFirmwareReq  NetFn = 0x08 // Firmware
+	NetFnFirmwareRes  NetFn = 0x09
+	NetFnStorageReq   NetFn = 0x0A // Non-volatile storage
+	NetFnStorageRes   NetFn = 0x0B
+	NetFnTransportReq NetFn = 0x0C // Media-specific configuration & control
+	NetFnTransportRes NetFn = 0x0D
+
+	NetFnOemOne NetFn = 0x30 // Controller specific OEM/Group
 )
 
 // NetFnRsLUN Network Function and Logical Unit Number
