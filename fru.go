@@ -26,11 +26,15 @@ type FRUCommonHeader struct {
 }
 
 func (f *FRUCommonHeader) Unmarshal(buf []byte) ([]byte, error) {
+	if l := len(buf); l < 1 {
+		return nil, fmt.Errorf("no data in FRU Common Header")
+	}
+	f.HeaderFormatVersion = buf[0] & 0x0F // bits 3:0
+
 	if l := len(buf); l < fruCommonHeaderSize {
-		return nil, fmt.Errorf("invalid FRU Common Header size : %d/%d", l, fruCommonHeaderSize)
+		return nil, fmt.Errorf("invalid FRU Common Header size : %d/%d, header version: %d [Raw Hex Data: %s]", l, fruCommonHeaderSize, f.HeaderFormatVersion, hex.EncodeToString(buf))
 	}
 
-	f.HeaderFormatVersion = buf[0] & 0x0F // bits 3:0
 	f.InternalUseAreaStartOffset = buf[1]
 	f.ChassisInfoAreaStartOffset = buf[2]
 	f.BoardInfoAreaStartOffset = buf[3]
