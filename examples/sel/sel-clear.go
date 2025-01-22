@@ -37,6 +37,7 @@ func getSelEntries(ip string) {
 	}
 
 	fmt.Printf("Total SEL entries: %d\n", total)
+	fmt.Printf("RecordID | Timestamp | SensorType | SensorNumber | Direction | Description\n")
 
 	// Get latest 50 events
 	count := 50
